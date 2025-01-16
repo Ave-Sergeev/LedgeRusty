@@ -1,11 +1,8 @@
-use crate::service::blockchain::Blockchain;
+use crate::service::repl::run_loop;
 
 mod service;
 
 fn main() {
-    let difficulty: usize = 1;
-    let mut blockchain: Blockchain = Blockchain::new(difficulty);
-
-    Blockchain::add_block(&mut blockchain);
-    Blockchain::get_all_blocks(&mut blockchain)
+    println!("Use the `> help` command to view available commands.");
+    run_loop()
 }

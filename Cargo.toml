@@ -9,3 +9,4 @@ serde = { version = "1.0.217", features = ["derive"] }
 serde_json = "1.0.135"
 sha2 = "0.10.8"
 chrono = "0.4"
+easy-repl = "0.2.1"

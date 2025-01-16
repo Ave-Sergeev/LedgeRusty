@@ -24,14 +24,22 @@ impl Block {
         }
     }
 
+    fn is_valid_hash(&self, blockchain: Blockchain) -> bool {
+        self.hash.starts_with(&"0".repeat(blockchain.difficulty))
+    }
+
+    fn increment_proof_of_work(&mut self) {
+        self.proof_of_work += 1;
+    }
+
+    fn generate_new_hash(&mut self) {
+        self.hash = self.generate_block_hash();
+    }
+
     pub fn mine(&mut self, blockchain: Blockchain) {
-        loop {
-            if self.hash.starts_with(&"0".repeat(blockchain.difficulty)) {
-                break;
-            } else {
-                self.proof_of_work += 1;
-                self.hash = self.generate_block_hash();
-            }
+        while !self.is_valid_hash(blockchain.clone()) {
+            self.increment_proof_of_work();
+            self.generate_new_hash();
         }
     }
 

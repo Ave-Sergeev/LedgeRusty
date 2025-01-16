@@ -2,12 +2,10 @@ use chrono::prelude::*;
 
 use super::block::Block;
 
-type Blocks = Vec<Block>;
-
 #[derive(Debug, Clone)]
 pub struct Blockchain {
     pub genesis_block: Block,
-    pub chain: Blocks,
+    pub chain: Vec<Block>,
     pub difficulty: usize,
 }
 
@@ -21,8 +19,7 @@ impl Blockchain {
             hash: String::default(),
         };
 
-        let mut chain = vec![];
-        chain.push(genesis_block.clone());
+        let chain = vec![genesis_block.clone()];
 
         Blockchain {
             genesis_block,
@@ -31,15 +28,19 @@ impl Blockchain {
         }
     }
 
+    pub fn update(&mut self, difficulty: usize) {
+        self.difficulty = difficulty;
+        self.genesis_block.timestamp = Utc::now().timestamp_millis() as u64;
+        self.chain.clear();
+        self.chain.push(self.genesis_block.clone());
+    }
+
     pub fn add_block(&mut self) {
-        let mut new_block = Block::new(
-            self.chain.len() as u64,
-            self.chain[&self.chain.len() - 1].hash.clone(),
-        );
+        let mut new_block = Block::new(self.chain.len() as u64, self.chain[&self.chain.len() - 1].hash.clone());
 
         new_block.mine(self.clone());
         self.chain.push(new_block.clone());
-        println!("New block added to the chain -> {new_block:?}");
+        println!("New block added to the chain");
     }
 
     pub fn get_all_blocks(&mut self) {
